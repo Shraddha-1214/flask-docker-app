@@ -1,23 +1,20 @@
 pipeline {
     agent any
+
     stages {
-        stage('Clone Code') {
+        stage('Checkout Code') {
             steps {
-                // Replace with your GitHub repository URL
-                git branch: 'main', url: 'https://github.com/Shraddha-1214/flask-docker-app.git'
+                git branch: 'main',
+                    url: 'https://github.com/Shraddha-1214/flask-docker-app.git'
             }
         }
-        stage('Build Docker Image') {
+
+        stage('Build and Deploy') {
             steps {
-                sh 'docker build -t flask-app:latest .'
-            }
-        }
-        stage('Deploy with Docker Compose') {
-            steps {
-                // Stop existing containers if they are running
-                sh 'docker compose down || true'
-                // Start the application, rebuilding the flask image
-                sh 'docker compose up -d --build'
+                sh '''
+                docker compose down || true
+                docker compose up -d --build
+                '''
             }
         }
     }
